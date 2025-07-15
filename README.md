@@ -48,8 +48,8 @@ streamlit run app.py
 ```
 
 ## 📦 Requirements
-- Python == 3.13
-- TensorFlow == 2.19.0
+- Python == 3.11
+- TensorFlow == 2.13.0
 - Streamlit
 
 ## 📝 Sample Output
