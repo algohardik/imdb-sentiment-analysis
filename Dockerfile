@@ -1,22 +1,33 @@
-# Use official Python image
+# Use official Python base image
 FROM python:3.11-slim
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV STREAMLIT_HOME=/app
 
 # Set working directory
-WORKDIR /app
+WORKDIR $STREAMLIT_HOME
 
-# Copy app code
-COPY . /app
+# Copy everything into the container
+COPY . .
+
+# Create writable .streamlit directory inside /app
+RUN mkdir -p $STREAMLIT_HOME/.streamlit
+
+# Set Streamlit config to avoid permission issues
+RUN echo "\
+[server]\n\
+headless = true\n\
+port = 7860\n\
+enableCORS = false\n\
+\n\
+" > $STREAMLIT_HOME/.streamlit/config.toml
 
 # Install dependencies
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# Expose port
+# Expose Streamlit port
 EXPOSE 7860
 
-# Run Streamlit
+# Run the Streamlit app
 CMD ["streamlit", "run", "app.py", "--server.port=7860", "--server.enableCORS=false"]
